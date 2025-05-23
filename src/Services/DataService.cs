@@ -332,10 +332,11 @@ namespace copilotTest.Services
                 ContentType = item.ContentType,
                 IsDynamicContent = item.IsDynamicContent,
                 Metadata = string.IsNullOrEmpty(item.Metadata) ? new object() : 
-                    JsonSerializer.Deserialize<object>(item.Metadata) ?? new object()
+                    System.Text.Json.JsonSerializer.Deserialize<object>(item.Metadata) ?? new object()
             }).ToList();
             
-            JsonSerializer.Serialize(writer.BaseStream, dtos, options);
+            var json = System.Text.Json.JsonSerializer.Serialize(dtos, options);
+            writer.Write(json);
         }
 
         /// <summary>
