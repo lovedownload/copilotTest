@@ -1,6 +1,7 @@
 using copilotTest.Infrastructure;
 using copilotTest.Services;
 using Hangfire;
+using Hangfire.Dashboard;
 using Hangfire.LiteDB;
 using Microsoft.Playwright;
 using Serilog;
