@@ -1,0 +1,48 @@
+name: .NET 8 Build and Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+      
+    # Playwright setup and tests if needed
+    - name: Check if Playwright tests exist
+      id: check-playwright
+      run: |
+        if grep -q "Microsoft.Playwright" $(find . -name "*.csproj") 2>/dev/null; then
+          echo "HasPlaywright=true" >> $GITHUB_OUTPUT
+        else
+          echo "HasPlaywright=false" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
+    
+    - name: Install Playwright
+      if: steps.check-playwright.outputs.HasPlaywright == 'true'
+      run: |
+        dotnet tool install --global Microsoft.Playwright.CLI
+        
+    - name: Install Playwright Browsers
+      if: steps.check-playwright.outputs.HasPlaywright == 'true'
+      run: playwright install
