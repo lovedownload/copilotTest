@@ -1,0 +1,8 @@
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.csproj.AssemblyReference.cache
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.AssemblyInfoInputs.cache
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.AssemblyInfo.cs
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.csproj.CoreCompileInputs.cache
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.MvcApplicationPartsAssemblyInfo.cs
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.MvcApplicationPartsAssemblyInfo.cache
+/home/runner/work/copilotTest/copilotTest/src/obj/Debug/net8.0/copilotTest.sourcelink.json
