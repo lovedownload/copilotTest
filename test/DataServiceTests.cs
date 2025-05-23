@@ -194,6 +194,116 @@ namespace copilotTest.Tests
         }
 
         /// <summary>
+        /// Test GetAll with invalid pagination parameters
+        /// </summary>
+        [Fact]
+        public void GetAll_WithInvalidParameters_ShouldHandleGracefully()
+        {
+            // Arrange - Add some test data
+            for (int i = 0; i < 3; i++)
+            {
+                _dataService.SaveData(new ScrapedData
+                {
+                    Url = $"https://example.com/page-{i}",
+                    Title = $"Test Page {i}",
+                    Content = $"<html><body>Content {i}</body></html>",
+                    ScrapedDate = DateTime.UtcNow
+                });
+            }
+
+            // Act - Test with invalid parameters
+            var (negPageResults, negPageCount) = _dataService.GetAll(page: -1, pageSize: 10);
+            var (negSizeResults, negSizeCount) = _dataService.GetAll(page: 1, pageSize: -5);
+            var (zeroSizeResults, zeroSizeCount) = _dataService.GetAll(page: 1, pageSize: 0);
+
+            // Assert - Should handle gracefully and return reasonable results
+            Assert.NotNull(negPageResults);
+            Assert.NotNull(negSizeResults);
+            Assert.NotNull(zeroSizeResults);
+            
+            // Total count should still be accurate
+            Assert.Equal(3, negPageCount);
+            Assert.Equal(3, negSizeCount);
+            Assert.Equal(3, zeroSizeCount);
+        }
+
+        /// <summary>
+        /// Test export data with invalid format
+        /// </summary>
+        [Fact]
+        public void ExportData_WithInvalidFormat_ShouldNotThrowException()
+        {
+            // Arrange
+            var exportRequest = new ExportRequestDto
+            {
+                Format = "invalid_format"
+            };
+
+            // Act & Assert - Should not throw exception
+            var stream = _dataService.ExportData(exportRequest);
+            
+            // Additional validation
+            Assert.NotNull(stream);
+            Assert.True(stream.Length > 0);
+        }
+
+        /// <summary>
+        /// Test saving data with invalid content
+        /// </summary>
+        [Fact]
+        public void SaveData_WithInvalidContent_ShouldHandleGracefully()
+        {
+            // Arrange
+            var invalidData = new ScrapedData
+            {
+                // URL is mandatory for content hash generation
+                Url = "https://example.com/invalid",
+                // Empty content and title which will cause issues with content hash
+                Content = string.Empty,
+                Title = string.Empty
+            };
+
+            // Act - This should not throw an exception
+            var result = _dataService.SaveData(invalidData);
+
+            // Assert - Original data should be returned
+            Assert.Equal(invalidData.Id, result.Id);
+            Assert.Equal(invalidData.Url, result.Url);
+        }
+
+        /// <summary>
+        /// Test deleting data with non-existent ID
+        /// </summary>
+        [Fact]
+        public void DeleteData_WithNonExistentId_ShouldReturnFalse()
+        {
+            // Arrange
+            var nonExistentId = Guid.NewGuid();
+
+            // Act
+            var result = _dataService.DeleteData(nonExistentId);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        /// <summary>
+        /// Test retrieving a non-existent ID
+        /// </summary>
+        [Fact]
+        public void GetById_WithNonExistentId_ShouldReturnNull()
+        {
+            // Arrange
+            var nonExistentId = Guid.NewGuid();
+
+            // Act
+            var result = _dataService.GetById(nonExistentId);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        /// <summary>
         /// Clean up test environment
         /// </summary>
         public void Dispose()
