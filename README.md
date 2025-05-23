@@ -66,6 +66,21 @@ Content-Type: application/json
 }
 ```
 
+아래의 curl 명령어를 통해 로컬 또는 서버에서 REST API를 쉽게 테스트할 수 있습니다.
+
+```sh
+curl -X POST http://localhost:8080/api/data/scrape/background \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "useDynamicScraping": true,
+    "selectors": {
+      "title": "h1",
+      "content": "main"
+    }
+  }'
+```
+
 ### Export collected data
 ```
 POST /api/data/export
@@ -76,4 +91,16 @@ Content-Type: application/json
   "urlFilter": "example.com",
   "startDate": "2023-01-01T00:00:00Z"
 }
+```
+
+아래의 curl 명령어를 통해 로컬 또는 서버에서 REST API를 쉽게 테스트할 수 있습니다.
+
+```sh
+curl -X POST http://localhost:8080/api/data/export \
+  -H "Content-Type: application/json" \
+  -d '{
+    "format": "csv",
+    "urlFilter": "example.com",
+    "startDate": "2023-01-01T00:00:00Z"
+  }'
 ```
