@@ -2,10 +2,10 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Hangfire.AspNetCore/1.8.6": {
+      "Hangfire.AspNetCore/1.8.20": {
         "type": "package",
         "dependencies": {
-          "Hangfire.NetCore": "[1.8.6]"
+          "Hangfire.NetCore": "[1.8.20]"
         },
         "compile": {
           "lib/netcoreapp3.0/Hangfire.AspNetCore.dll": {
@@ -21,7 +21,7 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Hangfire.Core/1.8.6": {
+      "Hangfire.Core/1.8.20": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "11.0.1"
@@ -99,10 +99,10 @@
           }
         }
       },
-      "Hangfire.NetCore/1.8.6": {
+      "Hangfire.NetCore/1.8.20": {
         "type": "package",
         "dependencies": {
-          "Hangfire.Core": "[1.8.6]",
+          "Hangfire.Core": "[1.8.20]",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "3.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "3.0.0"
@@ -749,10 +749,10 @@
     }
   },
   "libraries": {
-    "Hangfire.AspNetCore/1.8.6": {
-      "sha512": "suPlu9iAnClUUiEptaekzXea+yTPSjDMNLlAwhwYjG1Cr/3IoYjVie7a3I7KKFkyTPBk5/O3pQTKspNIX5WFww==",
+    "Hangfire.AspNetCore/1.8.20": {
+      "sha512": "OoVxOZanKlnpyAuCAYWKGztQHYw6GTQxQD/W3bfOfFsD+8fYp7FEDKbMEsrrMvAtF+gLiY1HNk9xYjUpNnSxGA==",
       "type": "package",
-      "path": "hangfire.aspnetcore/1.8.6",
+      "path": "hangfire.aspnetcore/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -762,8 +762,9 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.aspnetcore.1.8.6.nupkg.sha512",
+        "hangfire.aspnetcore.1.8.20.nupkg.sha512",
         "hangfire.aspnetcore.nuspec",
+        "icon.png",
         "lib/net451/Hangfire.AspNetCore.dll",
         "lib/net451/Hangfire.AspNetCore.xml",
         "lib/net461/Hangfire.AspNetCore.dll",
@@ -776,10 +777,10 @@
         "lib/netstandard2.0/Hangfire.AspNetCore.xml"
       ]
     },
-    "Hangfire.Core/1.8.6": {
-      "sha512": "P50VPSXyQBTOE6eISGusU+8X+ILCE+EPYX8njg4h5tGDhjf6QSuXLonuoD/NlFRh/GUtdL4g6jCKs/HQH6or2g==",
+    "Hangfire.Core/1.8.20": {
+      "sha512": "PSk0daUo3WCcnh89Bydj/xJ+M7GA+eR4nXXD5v/CIBOTCAx+oa3/DNjqLJPC9QHojsKXt0DO6u87aGxCQZ78Og==",
       "type": "package",
-      "path": "hangfire.core/1.8.6",
+      "path": "hangfire.core/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -789,8 +790,10 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.core.1.8.6.nupkg.sha512",
+        "README.md",
+        "hangfire.core.1.8.20.nupkg.sha512",
         "hangfire.core.nuspec",
+        "icon.png",
         "lib/net451/Hangfire.Core.dll",
         "lib/net451/Hangfire.Core.xml",
         "lib/net451/ca/Hangfire.Core.resources.dll",
@@ -872,10 +875,10 @@
         "lib/netstandard2.0/Hangfire.LiteDB.xml"
       ]
     },
-    "Hangfire.NetCore/1.8.6": {
-      "sha512": "ARzTqET2prSH8cr1oFISUdJLpHQBcb/2brbMubF0O3q6SORt1lHWn7dQHPu+U2ae73j50da+LMH6CBBHDymWxQ==",
+    "Hangfire.NetCore/1.8.20": {
+      "sha512": "QCMoUaOokUsScJIyyo9SDVaAOpPIaIpBhGzN7M9GgZI9Kzetd7Y+hmFlQUTpROi7bcASIGoTOPnPoqdNA///Rw==",
       "type": "package",
-      "path": "hangfire.netcore/1.8.6",
+      "path": "hangfire.netcore/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -885,8 +888,9 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.netcore.1.8.6.nupkg.sha512",
+        "hangfire.netcore.1.8.20.nupkg.sha512",
         "hangfire.netcore.nuspec",
+        "icon.png",
         "lib/net451/Hangfire.NetCore.dll",
         "lib/net451/Hangfire.NetCore.xml",
         "lib/net461/Hangfire.NetCore.dll",
@@ -2531,7 +2535,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Hangfire.AspNetCore >= 1.8.6",
+      "Hangfire.AspNetCore >= 1.8.20",
       "Hangfire.LiteDB >= 0.4.1",
       "LiteDB >= 5.0.17",
       "Microsoft.AspNetCore.OpenApi >= 8.0.0",
@@ -2581,7 +2585,7 @@
         "dependencies": {
           "Hangfire.AspNetCore": {
             "target": "Package",
-            "version": "[1.8.6, )"
+            "version": "[1.8.20, )"
           },
           "Hangfire.LiteDB": {
             "target": "Package",

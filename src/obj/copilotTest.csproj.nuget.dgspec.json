@@ -40,7 +40,7 @@
           "dependencies": {
             "Hangfire.AspNetCore": {
               "target": "Package",
-              "version": "[1.8.6, )"
+              "version": "[1.8.20, )"
             },
             "Hangfire.LiteDB": {
               "target": "Package",
