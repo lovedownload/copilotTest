@@ -1,13 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "wAoftCLWymYF5mpTI+NpDuHRBKIlK5u3PVctiqh8PoMsuWJvJoAfn6jtiPYlInW9BksNVkwbdQU71VD1dVuHmg==",
+  "dgSpecHash": "Wr2PrTlRkvaDFh0c9wJvzW9hzkZdlEK0sYHGW/cUj4TJcgln8YgYZrP6r0rI2nYJphUUMyhyLRoqp8auKFpbng==",
   "success": true,
   "projectFilePath": "/home/runner/work/copilotTest/copilotTest/src/copilotTest.csproj",
   "expectedPackageFiles": [
-    "/home/runner/.nuget/packages/hangfire.aspnetcore/1.8.6/hangfire.aspnetcore.1.8.6.nupkg.sha512",
-    "/home/runner/.nuget/packages/hangfire.core/1.8.6/hangfire.core.1.8.6.nupkg.sha512",
+    "/home/runner/.nuget/packages/hangfire.aspnetcore/1.8.20/hangfire.aspnetcore.1.8.20.nupkg.sha512",
+    "/home/runner/.nuget/packages/hangfire.core/1.8.20/hangfire.core.1.8.20.nupkg.sha512",
+    "/home/runner/.nuget/packages/hangfire.dashboard.authorization/3.1.0/hangfire.dashboard.authorization.3.1.0.nupkg.sha512",
     "/home/runner/.nuget/packages/hangfire.litedb/0.4.1/hangfire.litedb.0.4.1.nupkg.sha512",
-    "/home/runner/.nuget/packages/hangfire.netcore/1.8.6/hangfire.netcore.1.8.6.nupkg.sha512",
+    "/home/runner/.nuget/packages/hangfire.netcore/1.8.20/hangfire.netcore.1.8.20.nupkg.sha512",
     "/home/runner/.nuget/packages/litedb/5.0.17/litedb.5.0.17.nupkg.sha512",
     "/home/runner/.nuget/packages/microsoft.aspnetcore.openapi/8.0.0/microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512",
     "/home/runner/.nuget/packages/microsoft.bcl.asyncinterfaces/6.0.0/microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
@@ -27,6 +28,7 @@
     "/home/runner/.nuget/packages/microsoft.openapi/1.4.3/microsoft.openapi.1.4.3.nupkg.sha512",
     "/home/runner/.nuget/packages/microsoft.playwright/1.39.0/microsoft.playwright.1.39.0.nupkg.sha512",
     "/home/runner/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512",
+    "/home/runner/.nuget/packages/owin/1.0.0/owin.1.0.0.nupkg.sha512",
     "/home/runner/.nuget/packages/serilog/3.1.1/serilog.3.1.1.nupkg.sha512",
     "/home/runner/.nuget/packages/serilog.aspnetcore/8.0.0/serilog.aspnetcore.8.0.0.nupkg.sha512",
     "/home/runner/.nuget/packages/serilog.extensions.hosting/8.0.0/serilog.extensions.hosting.8.0.0.nupkg.sha512",
@@ -45,5 +47,26 @@
     "/home/runner/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
     "/home/runner/.nuget/packages/system.text.json/8.0.0/system.text.json.8.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Hangfire.Dashboard.Authorization 3.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Hangfire.Dashboard.Authorization",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Owin 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Owin",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

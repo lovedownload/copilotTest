@@ -2,10 +2,10 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Hangfire.AspNetCore/1.8.6": {
+      "Hangfire.AspNetCore/1.8.20": {
         "type": "package",
         "dependencies": {
-          "Hangfire.NetCore": "[1.8.6]"
+          "Hangfire.NetCore": "[1.8.20]"
         },
         "compile": {
           "lib/netcoreapp3.0/Hangfire.AspNetCore.dll": {
@@ -21,7 +21,7 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Hangfire.Core/1.8.6": {
+      "Hangfire.Core/1.8.20": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "11.0.1"
@@ -81,6 +81,23 @@
           }
         }
       },
+      "Hangfire.Dashboard.Authorization/3.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Hangfire.Core": "1.6.0",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Hangfire.Dashboard.Authorization.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Hangfire.Dashboard.Authorization.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Hangfire.LiteDB/0.4.1": {
         "type": "package",
         "dependencies": {
@@ -99,10 +116,10 @@
           }
         }
       },
-      "Hangfire.NetCore/1.8.6": {
+      "Hangfire.NetCore/1.8.20": {
         "type": "package",
         "dependencies": {
-          "Hangfire.Core": "[1.8.6]",
+          "Hangfire.Core": "[1.8.20]",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "3.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "3.0.0"
@@ -453,6 +470,15 @@
           }
         }
       },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
+        }
+      },
       "Serilog/3.1.1": {
         "type": "package",
         "compile": {
@@ -749,10 +775,10 @@
     }
   },
   "libraries": {
-    "Hangfire.AspNetCore/1.8.6": {
-      "sha512": "suPlu9iAnClUUiEptaekzXea+yTPSjDMNLlAwhwYjG1Cr/3IoYjVie7a3I7KKFkyTPBk5/O3pQTKspNIX5WFww==",
+    "Hangfire.AspNetCore/1.8.20": {
+      "sha512": "OoVxOZanKlnpyAuCAYWKGztQHYw6GTQxQD/W3bfOfFsD+8fYp7FEDKbMEsrrMvAtF+gLiY1HNk9xYjUpNnSxGA==",
       "type": "package",
-      "path": "hangfire.aspnetcore/1.8.6",
+      "path": "hangfire.aspnetcore/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -762,8 +788,9 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.aspnetcore.1.8.6.nupkg.sha512",
+        "hangfire.aspnetcore.1.8.20.nupkg.sha512",
         "hangfire.aspnetcore.nuspec",
+        "icon.png",
         "lib/net451/Hangfire.AspNetCore.dll",
         "lib/net451/Hangfire.AspNetCore.xml",
         "lib/net461/Hangfire.AspNetCore.dll",
@@ -776,10 +803,10 @@
         "lib/netstandard2.0/Hangfire.AspNetCore.xml"
       ]
     },
-    "Hangfire.Core/1.8.6": {
-      "sha512": "P50VPSXyQBTOE6eISGusU+8X+ILCE+EPYX8njg4h5tGDhjf6QSuXLonuoD/NlFRh/GUtdL4g6jCKs/HQH6or2g==",
+    "Hangfire.Core/1.8.20": {
+      "sha512": "PSk0daUo3WCcnh89Bydj/xJ+M7GA+eR4nXXD5v/CIBOTCAx+oa3/DNjqLJPC9QHojsKXt0DO6u87aGxCQZ78Og==",
       "type": "package",
-      "path": "hangfire.core/1.8.6",
+      "path": "hangfire.core/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -789,8 +816,10 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.core.1.8.6.nupkg.sha512",
+        "README.md",
+        "hangfire.core.1.8.20.nupkg.sha512",
         "hangfire.core.nuspec",
+        "icon.png",
         "lib/net451/Hangfire.Core.dll",
         "lib/net451/Hangfire.Core.xml",
         "lib/net451/ca/Hangfire.Core.resources.dll",
@@ -857,6 +886,22 @@
         "lib/netstandard2.0/zh/Hangfire.Core.resources.dll"
       ]
     },
+    "Hangfire.Dashboard.Authorization/3.1.0": {
+      "sha512": "WSCTw2szdv01arMPRcrzoL56MvooA5+miXlH4xNDJayDNO1fQ1LntHIwl1rMXvrYKfrZhQD46NsxkUggyCxfWw==",
+      "type": "package",
+      "path": "hangfire.dashboard.authorization/3.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "hangfire.dashboard.authorization.3.1.0.nupkg.sha512",
+        "hangfire.dashboard.authorization.nuspec",
+        "icon.png",
+        "lib/net45/Hangfire.Dashboard.Authorization.dll",
+        "lib/net45/Hangfire.Dashboard.Authorization.xml"
+      ]
+    },
     "Hangfire.LiteDB/0.4.1": {
       "sha512": "jPA6x0gAn3CD2LYDcbAW8hfdggRQtKiWXtwt3GwNw86hHTaWjaQ9pfj5LovBlFCr73luMnKCzNJTbhaPqoQRPQ==",
       "type": "package",
@@ -872,10 +917,10 @@
         "lib/netstandard2.0/Hangfire.LiteDB.xml"
       ]
     },
-    "Hangfire.NetCore/1.8.6": {
-      "sha512": "ARzTqET2prSH8cr1oFISUdJLpHQBcb/2brbMubF0O3q6SORt1lHWn7dQHPu+U2ae73j50da+LMH6CBBHDymWxQ==",
+    "Hangfire.NetCore/1.8.20": {
+      "sha512": "QCMoUaOokUsScJIyyo9SDVaAOpPIaIpBhGzN7M9GgZI9Kzetd7Y+hmFlQUTpROi7bcASIGoTOPnPoqdNA///Rw==",
       "type": "package",
-      "path": "hangfire.netcore/1.8.6",
+      "path": "hangfire.netcore/1.8.20",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -885,8 +930,9 @@
         "LICENSE_ROYALTYFREE",
         "LICENSE_STANDARD",
         "NOTICES",
-        "hangfire.netcore.1.8.6.nupkg.sha512",
+        "hangfire.netcore.1.8.20.nupkg.sha512",
         "hangfire.netcore.nuspec",
+        "icon.png",
         "lib/net451/Hangfire.NetCore.dll",
         "lib/net451/Hangfire.NetCore.xml",
         "lib/net461/Hangfire.NetCore.dll",
@@ -1989,6 +2035,18 @@
         "packageIcon.png"
       ]
     },
+    "Owin/1.0.0": {
+      "sha512": "OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
+      "type": "package",
+      "path": "owin/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/Owin.dll",
+        "owin.1.0.0.nupkg.sha512",
+        "owin.nuspec"
+      ]
+    },
     "Serilog/3.1.1": {
       "sha512": "P6G4/4Kt9bT635bhuwdXlJ2SCqqn2nhh4gqFqQueCOr9bK/e7W9ll/IoX1Ter948cV2Z/5+5v8pAfJYUISY03A==",
       "type": "package",
@@ -2531,7 +2589,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Hangfire.AspNetCore >= 1.8.6",
+      "Hangfire.AspNetCore >= 1.8.20",
+      "Hangfire.Dashboard.Authorization >= 3.1.0",
       "Hangfire.LiteDB >= 0.4.1",
       "LiteDB >= 5.0.17",
       "Microsoft.AspNetCore.OpenApi >= 8.0.0",
@@ -2581,7 +2640,11 @@
         "dependencies": {
           "Hangfire.AspNetCore": {
             "target": "Package",
-            "version": "[1.8.6, )"
+            "version": "[1.8.20, )"
+          },
+          "Hangfire.Dashboard.Authorization": {
+            "target": "Package",
+            "version": "[3.1.0, )"
           },
           "Hangfire.LiteDB": {
             "target": "Package",
@@ -2638,5 +2701,27 @@
         "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.115/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Hangfire.Dashboard.Authorization 3.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Hangfire.Dashboard.Authorization",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Owin 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Owin",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }
