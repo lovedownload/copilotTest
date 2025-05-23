@@ -63,7 +63,7 @@ namespace copilotTest.Models
         public string Content { get; set; } = string.Empty;
 
         /// <summary>
-        /// Metadata extracted from the page
+        /// Metadata extracted from the page (deserialized from JSON format)
         /// </summary>
         public object Metadata { get; set; } = new object();
 
