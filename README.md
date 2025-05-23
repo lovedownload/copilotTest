@@ -1,57 +1,57 @@
 # copilotTest
 
-A web scraping application built with .NET 8.0 that provides REST APIs for collecting, storing, and exporting web content. The application supports both static and dynamic web scraping approaches, with built-in features for data deduplication and background processing.
+.NET 8.0으로 구축된 웹 스크래핑 애플리케이션으로 웹 콘텐츠 수집, 저장 및 내보내기를 위한 REST API를 제공합니다. 이 애플리케이션은 정적 및 동적 웹 스크래핑 접근 방식을 모두 지원하며, 데이터 중복 제거 및 백그라운드 처리를 위한 기능이 내장되어 있습니다.
 
-## Features
+## 기능
 
-- **Multi-mode web scraping**:
-  - Static scraping for traditional HTML/JSON content
-  - Dynamic scraping using Playwright for JavaScript-rendered pages
-  - Custom CSS selector support for targeted content extraction
-- **Efficient data storage**:
-  - LiteDB NoSQL database for scraped content
-  - Content hashing for deduplication
-  - Metadata storage for additional context
-- **Background processing**:
-  - Hangfire integration for queueing and scheduling scrape jobs
-  - Batch URL processing support
-- **Flexible data export**:
-  - Export to CSV, JSON, or HTML formats
-  - Filtering options by date range and URL
+- **다중 모드 웹 스크래핑**:
+  - 전통적인 HTML/JSON 콘텐츠를 위한 정적 스크래핑
+  - JavaScript로 렌더링된 페이지를 위한 Playwright를 사용한 동적 스크래핑
+  - 대상 콘텐츠 추출을 위한 사용자 정의 CSS 선택자 지원
+- **효율적인 데이터 저장**:
+  - 스크래핑된 콘텐츠를 위한 LiteDB NoSQL 데이터베이스
+  - 콘텐츠 해싱을 통한 중복 제거
+  - 추가 컨텍스트를 위한 메타데이터 저장
+- **백그라운드 처리**:
+  - 스크래핑 작업 대기열 및 일정 관리를 위한 Hangfire 통합
+  - 배치 URL 처리 지원
+- **유연한 데이터 내보내기**:
+  - CSV, JSON 또는 HTML 형식으로 내보내기
+  - 날짜 범위 및 URL별 필터링 옵션
 
-## Installation
+## 설치
 
-### Prerequisites
+### 필수 조건
 - .NET 8.0 SDK
-- Docker (optional, for containerized deployment)
+- Docker (선택 사항, 컨테이너화된 배포용)
 
-### Local Development
-1. Clone the repository
+### 로컬 개발
+1. 리포지토리 복제
    ```
    git clone https://github.com/lovedownload/copilotTest.git
    cd copilotTest
    ```
 
-2. Restore dependencies and build
+2. 종속성 복원 및 빌드
    ```
    dotnet restore src/copilotTest.csproj
    dotnet build src/copilotTest.csproj
    ```
 
-3. Run the application
+3. 애플리케이션 실행
    ```
    dotnet run --project src/copilotTest.csproj
    ```
 
-### Docker Deployment
+### Docker 배포
 ```
 docker build -t copilottest .
 docker run -p 8080:8080 copilottest
 ```
 
-## Usage Examples
+## 사용 예제
 
-### Scrape a webpage (via API)
+### 웹페이지 스크래핑 (API를 통해)
 ```
 POST /api/data/scrape/background
 Content-Type: application/json
@@ -66,7 +66,7 @@ Content-Type: application/json
 }
 ```
 
-### Export collected data
+### 수집된 데이터 내보내기
 ```
 POST /api/data/export
 Content-Type: application/json
