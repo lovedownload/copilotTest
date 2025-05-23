@@ -50,6 +50,7 @@ namespace copilotTest.Infrastructure
             // Ensure the directory exists
             var dbPath = options.Value.DatabasePath;
             var directory = Path.GetDirectoryName(dbPath);
+            // Only create directory if it's not null or empty and doesn't already exist
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
