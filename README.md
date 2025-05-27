@@ -14,7 +14,7 @@
   - 추가 컨텍스트를 위한 메타데이터 저장
 - **백그라운드 처리**:
   - 스크래핑 작업 대기열 및 일정 관리를 위한 Hangfire 통합
-  - 배치 URL 처리 지원
+  - 단일 요청으로 여러 URL을 병렬 처리 지원
 - **유연한 데이터 내보내기**:
   - CSV, JSON 또는 HTML 형식으로 내보내기
   - 날짜 범위 및 URL별 필터링 옵션
@@ -59,6 +59,7 @@ Content-Type: application/json
 {
   "url": "https://example.com",
   "useDynamicScraping": true,
+  "waitTimeMs": 8000,
   "selectors": {
     "title": "h1",
     "content": "main"
@@ -74,6 +75,7 @@ Content-Type: application/json
 {
   "urls": ["https://example.com", "https://example.org", "https://example.net"],
   "useDynamicScraping": true,
+  "waitTimeMs": 5000,
   "selectors": {
     "title": "h1",
     "content": "main"

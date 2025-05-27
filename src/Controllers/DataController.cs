@@ -147,8 +147,8 @@ namespace copilotTest.Controllers
         /// <summary>
         /// Scrape a URL synchronously
         /// </summary>
-        /// <param name="request">Scraping request</param>
-        /// <returns>Scraped data</returns>
+        /// <param name="request">Scraping request (ScrapingRequestDto for single URL or BatchScrapingRequestDto for multiple URLs)</param>
+        /// <returns>Scraped data (single object or list)</returns>
         [HttpPost("scrape")]
         [ProducesResponseType(typeof(ScrapedDataDto), 200)]
         [ProducesResponseType(typeof(List<ScrapedDataDto>), 200)]
@@ -157,7 +157,8 @@ namespace copilotTest.Controllers
         {
             try
             {
-                // Determine if it's a single URL request or batch request
+                // Using JsonSerializer to detect the request type based on the presence of "urls" property
+                // This allows us to accept both single and batch requests in the same endpoint
                 if (requestObj.GetType().GetProperty("Urls") != null)
                 {
                     // Process batch request
@@ -225,7 +226,7 @@ namespace copilotTest.Controllers
         /// <summary>
         /// Queue a URL for background scraping
         /// </summary>
-        /// <param name="requestObj">Scraping request or batch request</param>
+        /// <param name="requestObj">Scraping request (ScrapingRequestDto for single URL or BatchScrapingRequestDto for multiple URLs)</param>
         /// <returns>Job ID or list of job IDs</returns>
         [HttpPost("scrape/background")]
         [ProducesResponseType(typeof(string), 202)]
@@ -235,7 +236,8 @@ namespace copilotTest.Controllers
         {
             try
             {
-                // Determine if it's a single URL request or batch request
+                // Using JsonSerializer to detect the request type based on the presence of "urls" property
+                // This allows us to accept both single and batch requests in the same endpoint
                 if (requestObj.GetType().GetProperty("Urls") != null)
                 {
                     // Process batch request
