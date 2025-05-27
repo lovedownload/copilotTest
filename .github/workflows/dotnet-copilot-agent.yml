@@ -27,14 +27,16 @@ jobs:
     - name: Test
       id: test
       continue-on-error: true
-      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test_results.trx"
+      run: |
+        mkdir -p TestResults
+        dotnet test --no-build --verbosity normal --logger "trx;LogFileName=TestResults/test_results.trx"
     
     - name: Upload test results
       if: steps.test.outcome != 'success'
       uses: actions/upload-artifact@v3
       with:
         name: test-results
-        path: '**/TestResults/*.trx'
+        path: 'TestResults/*.trx'
     
     - name: Copilot Analysis
       if: steps.test.outcome != 'success'
@@ -43,7 +45,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         attachments: |-
           [
-            { "path": "**/TestResults/*.trx", "name": "Test Results", "type": "trx" }
+            { "path": "TestResults/*.trx", "name": "Test Results", "type": "trx" }
           ]
         instructions: |-
           You're helping with a .NET web scraping application built on .NET 8.0 with LiteDB. 
