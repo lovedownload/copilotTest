@@ -37,6 +37,7 @@ jobs:
       with:
         name: test-results
         path: 'TestResults/*.trx'
+        if-no-files-found: ignore
     
     - name: Copilot Analysis
       if: steps.test.outcome != 'success'
