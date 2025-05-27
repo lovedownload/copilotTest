@@ -24,6 +24,13 @@ namespace copilotTest.Services
         Task<ScrapedData> ScrapeUrlAsync(ScrapingRequestDto request);
 
         /// <summary>
+        /// Scrapes multiple webpages asynchronously in parallel
+        /// </summary>
+        /// <param name="request">Batch scraping request with URLs and options</param>
+        /// <returns>List of scraped data from the webpages</returns>
+        Task<List<ScrapedData>> ScrapeUrlsAsync(BatchScrapingRequestDto request);
+
+        /// <summary>
         /// Scrapes a webpage using static HTTP request (no JavaScript execution)
         /// </summary>
         /// <param name="url">URL to scrape</param>
@@ -280,6 +287,34 @@ namespace copilotTest.Services
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Scrapes multiple webpages asynchronously in parallel
+        /// </summary>
+        public async Task<List<ScrapedData>> ScrapeUrlsAsync(BatchScrapingRequestDto batchRequest)
+        {
+            _logger.LogInformation("Starting batch scraping for {Count} URLs", batchRequest.Urls.Count);
+            
+            // Create individual requests from batch request
+            var requests = batchRequest.Urls
+                .Where(url => !string.IsNullOrWhiteSpace(url))
+                .Select(url => new ScrapingRequestDto
+                {
+                    Url = url,
+                    UseDynamicScraping = batchRequest.UseDynamicScraping,
+                    WaitTimeMs = batchRequest.WaitTimeMs,
+                    Selectors = batchRequest.Selectors
+                })
+                .ToList();
+
+            // Process requests in parallel
+            var tasks = requests.Select(ScrapeUrlAsync).ToArray();
+            var results = await Task.WhenAll(tasks);
+            
+            _logger.LogInformation("Completed batch scraping for {Count} URLs", results.Length);
+            
+            return results.ToList();
         }
 
         #region Helper Methods

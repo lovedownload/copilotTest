@@ -53,11 +53,26 @@ docker run -p 8080:8080 copilottest
 
 ### 웹페이지 스크래핑 (API를 통해)
 ```
-POST /api/data/scrape/background
+POST /api/data/scrape
 Content-Type: application/json
 
 {
   "url": "https://example.com",
+  "useDynamicScraping": true,
+  "selectors": {
+    "title": "h1",
+    "content": "main"
+  }
+}
+```
+
+### 복수의 웹페이지 동시 스크래핑
+```
+POST /api/data/scrape
+Content-Type: application/json
+
+{
+  "urls": ["https://example.com", "https://example.org", "https://example.net"],
   "useDynamicScraping": true,
   "selectors": {
     "title": "h1",
@@ -81,6 +96,33 @@ Content-Type: application/json
 아래의 curl 명령어를 통해 로컬 또는 서버에서 REST API를 쉽게 테스트할 수 있습니다.
 
 ```sh
+curl -X POST http://localhost:8080/api/data/scrape \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com",
+    "useDynamicScraping": true,
+    "selectors": {
+      "title": "h1",
+      "content": "main"
+    }
+  }'
+```
+
+```sh
+curl -X POST http://localhost:8080/api/data/scrape \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": ["https://example.com", "https://example.org"],
+    "useDynamicScraping": true,
+    "selectors": {
+      "title": "h1",
+      "content": "main"
+    }
+  }'
+```
+
+### 백그라운드에서 스크래핑 작업 큐에 추가
+```sh
 curl -X POST http://localhost:8080/api/data/scrape/background \
   -H "Content-Type: application/json" \
   -d '{
@@ -90,6 +132,15 @@ curl -X POST http://localhost:8080/api/data/scrape/background \
       "title": "h1",
       "content": "main"
     }
+  }'
+```
+
+```sh
+curl -X POST http://localhost:8080/api/data/scrape/background \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": ["https://example.com", "https://example.org"],
+    "useDynamicScraping": true
   }'
 ```
 
