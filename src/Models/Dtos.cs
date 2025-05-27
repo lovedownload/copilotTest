@@ -140,4 +140,31 @@ namespace copilotTest.Models
         /// </summary>
         public int PageSize { get; set; }
     }
+    
+    /// <summary>
+    /// Request DTO for batch scraping operations
+    /// </summary>
+    public class BatchScrapingRequestDto
+    {
+        /// <summary>
+        /// List of URLs to scrape
+        /// </summary>
+        [Required]
+        public List<string> Urls { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Whether to use dynamic content scraping (Playwright)
+        /// </summary>
+        public bool UseDynamicScraping { get; set; } = false;
+
+        /// <summary>
+        /// Wait time in milliseconds for dynamic page loading
+        /// </summary>
+        public int WaitTimeMs { get; set; } = 5000;
+
+        /// <summary>
+        /// Custom CSS selectors to extract specific content
+        /// </summary>
+        public Dictionary<string, string> Selectors { get; set; } = new Dictionary<string, string>();
+    }
 }

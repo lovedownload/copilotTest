@@ -147,26 +147,78 @@ namespace copilotTest.Controllers
         /// <summary>
         /// Scrape a URL synchronously
         /// </summary>
-        /// <param name="request">Scraping request</param>
-        /// <returns>Scraped data</returns>
+        /// <param name="request">Scraping request (ScrapingRequestDto for single URL or BatchScrapingRequestDto for multiple URLs)</param>
+        /// <returns>Scraped data (single object or list)</returns>
         [HttpPost("scrape")]
         [ProducesResponseType(typeof(ScrapedDataDto), 200)]
+        [ProducesResponseType(typeof(List<ScrapedDataDto>), 200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> ScrapeUrl([FromBody] ScrapingRequestDto request)
+        public async Task<IActionResult> ScrapeUrl([FromBody] object requestObj)
         {
             try
             {
-                if (!Uri.TryCreate(request.Url, UriKind.Absolute, out _))
+                // Using JsonSerializer to detect the request type based on the presence of "urls" property
+                // This allows us to accept both single and batch requests in the same endpoint
+                if (requestObj.GetType().GetProperty("Urls") != null)
                 {
-                    return BadRequest("Invalid URL format");
+                    // Process batch request
+                    var batchRequest = System.Text.Json.JsonSerializer.Deserialize<BatchScrapingRequestDto>(
+                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                    
+                    if (batchRequest == null || batchRequest.Urls == null || !batchRequest.Urls.Any())
+                    {
+                        return BadRequest("No valid URLs provided");
+                    }
+                    
+                    // Validate URLs
+                    var validUrls = batchRequest.Urls
+                        .Where(url => Uri.TryCreate(url, UriKind.Absolute, out _))
+                        .ToList();
+                    
+                    if (!validUrls.Any())
+                    {
+                        return BadRequest("No valid URLs found in the request");
+                    }
+                    
+                    // If only one URL, process as a single request for efficiency
+                    if (validUrls.Count == 1)
+                    {
+                        var singleRequest = new ScrapingRequestDto
+                        {
+                            Url = validUrls[0],
+                            UseDynamicScraping = batchRequest.UseDynamicScraping,
+                            WaitTimeMs = batchRequest.WaitTimeMs,
+                            Selectors = batchRequest.Selectors
+                        };
+                        
+                        var scrapedData = await _scraperService.ScrapeUrlAsync(singleRequest);
+                        return Ok(MapToDto(scrapedData));
+                    }
+                    
+                    // Process multiple URLs in parallel
+                    batchRequest.Urls = validUrls; // Only keep valid URLs
+                    var scrapedDataList = await _scraperService.ScrapeUrlsAsync(batchRequest);
+                    
+                    return Ok(scrapedDataList.Select(MapToDto).ToList());
                 }
-
-                var scrapedData = await _scraperService.ScrapeUrlAsync(request);
-                return Ok(MapToDto(scrapedData));
+                else
+                {
+                    // Process single URL request
+                    var request = System.Text.Json.JsonSerializer.Deserialize<ScrapingRequestDto>(
+                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                    
+                    if (request == null || !Uri.TryCreate(request.Url, UriKind.Absolute, out _))
+                    {
+                        return BadRequest("Invalid URL format");
+                    }
+                    
+                    var scrapedData = await _scraperService.ScrapeUrlAsync(request);
+                    return Ok(MapToDto(scrapedData));
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error scraping URL {Url}", request.Url);
+                _logger.LogError(ex, "Error scraping URL(s)");
                 return StatusCode(500, $"An error occurred during scraping: {ex.Message}");
             }
         }
@@ -174,28 +226,81 @@ namespace copilotTest.Controllers
         /// <summary>
         /// Queue a URL for background scraping
         /// </summary>
-        /// <param name="request">Scraping request</param>
-        /// <returns>Job ID</returns>
+        /// <param name="requestObj">Scraping request (ScrapingRequestDto for single URL or BatchScrapingRequestDto for multiple URLs)</param>
+        /// <returns>Job ID or list of job IDs</returns>
         [HttpPost("scrape/background")]
         [ProducesResponseType(typeof(string), 202)]
+        [ProducesResponseType(typeof(List<string>), 202)]
         [ProducesResponseType(400)]
-        public IActionResult QueueScrapeUrl([FromBody] ScrapingRequestDto request)
+        public IActionResult QueueScrapeUrl([FromBody] object requestObj)
         {
             try
             {
-                if (!Uri.TryCreate(request.Url, UriKind.Absolute, out _))
+                // Using JsonSerializer to detect the request type based on the presence of "urls" property
+                // This allows us to accept both single and batch requests in the same endpoint
+                if (requestObj.GetType().GetProperty("Urls") != null)
                 {
-                    return BadRequest("Invalid URL format");
+                    // Process batch request
+                    var batchRequest = System.Text.Json.JsonSerializer.Deserialize<BatchScrapingRequestDto>(
+                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                    
+                    if (batchRequest == null || batchRequest.Urls == null || !batchRequest.Urls.Any())
+                    {
+                        return BadRequest("No valid URLs provided");
+                    }
+                    
+                    var jobIds = new List<string>();
+                    
+                    foreach (var url in batchRequest.Urls)
+                    {
+                        if (Uri.TryCreate(url, UriKind.Absolute, out _))
+                        {
+                            var request = new ScrapingRequestDto
+                            {
+                                Url = url,
+                                UseDynamicScraping = batchRequest.UseDynamicScraping,
+                                WaitTimeMs = batchRequest.WaitTimeMs,
+                                Selectors = batchRequest.Selectors
+                            };
+                            
+                            var jobId = _backgroundJobClient.Enqueue<IScraperService>(
+                                service => service.ScrapeUrlAsync(request));
+                            
+                            jobIds.Add(jobId);
+                        }
+                        else
+                        {
+                            _logger.LogWarning("Invalid URL format: {Url}, skipping", url);
+                        }
+                    }
+                    
+                    if (!jobIds.Any())
+                    {
+                        return BadRequest("No valid URLs were found in the request");
+                    }
+                    
+                    return Accepted(new { JobIds = jobIds });
                 }
-
-                var jobId = _backgroundJobClient.Enqueue<IScraperService>(
-                    service => service.ScrapeUrlAsync(request));
-
-                return Accepted(new { JobId = jobId });
+                else
+                {
+                    // Process single URL request
+                    var request = System.Text.Json.JsonSerializer.Deserialize<ScrapingRequestDto>(
+                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                    
+                    if (request == null || !Uri.TryCreate(request.Url, UriKind.Absolute, out _))
+                    {
+                        return BadRequest("Invalid URL format");
+                    }
+                    
+                    var jobId = _backgroundJobClient.Enqueue<IScraperService>(
+                        service => service.ScrapeUrlAsync(request));
+                    
+                    return Accepted(new { JobId = jobId });
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error queueing scrape job for URL {Url}", request.Url);
+                _logger.LogError(ex, "Error queueing scrape job");
                 return StatusCode(500, $"An error occurred while queueing the job: {ex.Message}");
             }
         }
@@ -251,6 +356,7 @@ namespace copilotTest.Controllers
         [HttpPost("scrape/batch")]
         [ProducesResponseType(typeof(List<string>), 202)]
         [ProducesResponseType(400)]
+        [Obsolete("This endpoint is deprecated. Use /api/data/scrape with a list of URLs instead.")]
         public IActionResult QueueBatchScrape(
             [FromBody] List<string> urls,
             [FromQuery] bool useDynamicScraping = false)
