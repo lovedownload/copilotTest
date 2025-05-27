@@ -42,10 +42,6 @@
               "target": "Package",
               "version": "[1.8.20, )"
             },
-            "Hangfire.Dashboard.Authorization": {
-              "target": "Package",
-              "version": "[3.1.0, )"
-            },
             "Hangfire.LiteDB": {
               "target": "Package",
               "version": "[0.4.1, )"
