@@ -186,7 +186,7 @@ namespace copilotTest.Tests
             var jsonContent = reader.ReadToEnd();
             
             // Parse the JSON
-            var exportedItems = JsonSerializer.Deserialize<ScrapedDataDto[]>(jsonContent);
+            var exportedItems = System.Text.Json.JsonSerializer.Deserialize<ScrapedDataDto[]>(jsonContent);
 
             // Assert
             Assert.NotNull(exportedItems);

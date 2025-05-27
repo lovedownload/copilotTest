@@ -1,0 +1,63 @@
+name: .NET Build and Test with Copilot Agent
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore
+    
+    - name: Test
+      id: test
+      continue-on-error: true
+      run: |
+        mkdir -p TestResults
+        dotnet test --no-build --verbosity normal --logger "trx;LogFileName=TestResults/test_results.trx"
+    
+    - name: Upload test results
+      if: steps.test.outcome != 'success'
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: 'TestResults/*.trx'
+    
+    - name: Copilot Analysis
+      if: steps.test.outcome != 'success'
+      uses: github/copilot-engineering/preview/gha-copilot-agent@main
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        attachments: |-
+          [
+            { "path": "TestResults/*.trx", "name": "Test Results", "type": "trx" }
+          ]
+        instructions: |-
+          You're helping with a .NET web scraping application built on .NET 8.0 with LiteDB. 
+          
+          Analyze the failing test results and identify the root cause of the failure. Create a PR that fixes the failing tests. 
+          
+          Your PR should be minimal and focused on fixing only the specific issues identified in the test failures.
+          
+          Pay attention to:
+          
+          1. Specific error messages in the test results
+          2. Line numbers and stack traces to locate the issue
+          3. Any patterns across multiple failures
+          
+          When you create your PR, include a clear description of the issue and how your changes fix it.
