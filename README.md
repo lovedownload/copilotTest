@@ -52,6 +52,10 @@ docker run -p 8080:8080 copilottest
 ## 사용 예제
 
 ### 웹페이지 스크래핑 (API를 통해)
+
+API는 단일 URL과 복수 URL 모두 동일한 엔드포인트로 처리합니다. 스크래핑 요청은 "url" 또는 "urls" 필드를 통해 전달될 수 있습니다.
+
+**단일 URL 스크래핑:**
 ```
 POST /api/data/scrape
 Content-Type: application/json
@@ -67,7 +71,7 @@ Content-Type: application/json
 }
 ```
 
-### 복수의 웹페이지 동시 스크래핑
+**복수의 웹페이지 동시 스크래핑:**
 ```
 POST /api/data/scrape
 Content-Type: application/json
@@ -83,6 +87,8 @@ Content-Type: application/json
 }
 ```
 
+복수 URL은 병렬로 처리되며, 응답은 스크래핑 결과의 배열로 반환됩니다. 단일 URL이 요청된 경우에는 단일 객체로 응답합니다.
+
 ### 수집된 데이터 내보내기
 ```
 POST /api/data/export
@@ -97,6 +103,7 @@ Content-Type: application/json
 
 아래의 curl 명령어를 통해 로컬 또는 서버에서 REST API를 쉽게 테스트할 수 있습니다.
 
+**단일 URL 스크래핑:**
 ```sh
 curl -X POST http://localhost:8080/api/data/scrape \
   -H "Content-Type: application/json" \
@@ -110,6 +117,7 @@ curl -X POST http://localhost:8080/api/data/scrape \
   }'
 ```
 
+**복수 URL 스크래핑: (병렬 처리)**
 ```sh
 curl -X POST http://localhost:8080/api/data/scrape \
   -H "Content-Type: application/json" \
@@ -124,6 +132,10 @@ curl -X POST http://localhost:8080/api/data/scrape \
 ```
 
 ### 백그라운드에서 스크래핑 작업 큐에 추가
+
+백그라운드 스크래핑도 동일한 방식으로 단일 URL 또는 복수 URLs를 처리할 수 있습니다:
+
+**단일 URL 백그라운드 스크래핑:**
 ```sh
 curl -X POST http://localhost:8080/api/data/scrape/background \
   -H "Content-Type: application/json" \
@@ -137,6 +149,7 @@ curl -X POST http://localhost:8080/api/data/scrape/background \
   }'
 ```
 
+**복수 URL 백그라운드 스크래핑:**
 ```sh
 curl -X POST http://localhost:8080/api/data/scrape/background \
   -H "Content-Type: application/json" \

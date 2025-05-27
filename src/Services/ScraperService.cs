@@ -292,6 +292,8 @@ namespace copilotTest.Services
         /// <summary>
         /// Scrapes multiple webpages asynchronously in parallel
         /// </summary>
+        /// <param name="batchRequest">Batch request containing multiple URLs and scraping options</param>
+        /// <returns>List of scraped data from all URLs</returns>
         public async Task<List<ScrapedData>> ScrapeUrlsAsync(BatchScrapingRequestDto batchRequest)
         {
             _logger.LogInformation("Starting batch scraping for {Count} URLs", batchRequest.Urls.Count);
@@ -307,6 +309,12 @@ namespace copilotTest.Services
                     Selectors = batchRequest.Selectors
                 })
                 .ToList();
+            
+            if (!requests.Any())
+            {
+                _logger.LogWarning("No valid URLs found in batch request");
+                return new List<ScrapedData>();
+            }
 
             // Process requests in parallel
             var tasks = requests.Select(ScrapeUrlAsync).ToArray();

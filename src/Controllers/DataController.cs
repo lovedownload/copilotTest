@@ -145,10 +145,10 @@ namespace copilotTest.Controllers
         }
 
         /// <summary>
-        /// Scrape a URL synchronously
+        /// Scrape one or multiple URLs synchronously
         /// </summary>
-        /// <param name="request">Scraping request (ScrapingRequestDto for single URL or BatchScrapingRequestDto for multiple URLs)</param>
-        /// <returns>Scraped data (single object or list)</returns>
+        /// <param name="request">Scraping request (ScrapingRequestDto for single URL or batch request with URLs array)</param>
+        /// <returns>Scraped data (single object or list of objects)</returns>
         [HttpPost("scrape")]
         [ProducesResponseType(typeof(ScrapedDataDto), 200)]
         [ProducesResponseType(typeof(List<ScrapedDataDto>), 200)]
@@ -157,13 +157,25 @@ namespace copilotTest.Controllers
         {
             try
             {
-                // Using JsonSerializer to detect the request type based on the presence of "urls" property
-                // This allows us to accept both single and batch requests in the same endpoint
-                if (requestObj.GetType().GetProperty("Urls") != null)
+                // Try to deserialize as a batch request with URLs array first
+                var jsonOptions = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                
+                // Get the raw JSON string to properly analyze the request
+                var jsonString = System.Text.Json.JsonSerializer.Serialize(requestObj);
+                using var document = System.Text.Json.JsonDocument.Parse(jsonString);
+                
+                // Check if the JSON has a "urls" property (case insensitive)
+                bool hasBatchUrls = document.RootElement.EnumerateObject()
+                    .Any(prop => prop.Name.Equals("urls", StringComparison.OrdinalIgnoreCase));
+                
+                if (hasBatchUrls)
                 {
                     // Process batch request
                     var batchRequest = System.Text.Json.JsonSerializer.Deserialize<BatchScrapingRequestDto>(
-                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                        jsonString, jsonOptions);
                     
                     if (batchRequest == null || batchRequest.Urls == null || !batchRequest.Urls.Any())
                     {
@@ -172,7 +184,7 @@ namespace copilotTest.Controllers
                     
                     // Validate URLs
                     var validUrls = batchRequest.Urls
-                        .Where(url => Uri.TryCreate(url, UriKind.Absolute, out _))
+                        .Where(url => !string.IsNullOrWhiteSpace(url) && Uri.TryCreate(url, UriKind.Absolute, out _))
                         .ToList();
                     
                     if (!validUrls.Any())
@@ -180,34 +192,27 @@ namespace copilotTest.Controllers
                         return BadRequest("No valid URLs found in the request");
                     }
                     
-                    // If only one URL, process as a single request for efficiency
-                    if (validUrls.Count == 1)
-                    {
-                        var singleRequest = new ScrapingRequestDto
-                        {
-                            Url = validUrls[0],
-                            UseDynamicScraping = batchRequest.UseDynamicScraping,
-                            WaitTimeMs = batchRequest.WaitTimeMs,
-                            Selectors = batchRequest.Selectors
-                        };
-                        
-                        var scrapedData = await _scraperService.ScrapeUrlAsync(singleRequest);
-                        return Ok(MapToDto(scrapedData));
-                    }
-                    
-                    // Process multiple URLs in parallel
+                    // If only one URL, still use the batch processing for consistency
                     batchRequest.Urls = validUrls; // Only keep valid URLs
                     var scrapedDataList = await _scraperService.ScrapeUrlsAsync(batchRequest);
                     
-                    return Ok(scrapedDataList.Select(MapToDto).ToList());
+                    // Return single object or array based on result count
+                    if (scrapedDataList.Count == 1)
+                    {
+                        return Ok(MapToDto(scrapedDataList[0]));
+                    }
+                    else
+                    {
+                        return Ok(scrapedDataList.Select(MapToDto).ToList());
+                    }
                 }
                 else
                 {
                     // Process single URL request
                     var request = System.Text.Json.JsonSerializer.Deserialize<ScrapingRequestDto>(
-                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                        jsonString, jsonOptions);
                     
-                    if (request == null || !Uri.TryCreate(request.Url, UriKind.Absolute, out _))
+                    if (request == null || string.IsNullOrWhiteSpace(request.Url) || !Uri.TryCreate(request.Url, UriKind.Absolute, out _))
                     {
                         return BadRequest("Invalid URL format");
                     }
@@ -224,9 +229,9 @@ namespace copilotTest.Controllers
         }
 
         /// <summary>
-        /// Queue a URL for background scraping
+        /// Queue one or multiple URLs for background scraping
         /// </summary>
-        /// <param name="requestObj">Scraping request (ScrapingRequestDto for single URL or BatchScrapingRequestDto for multiple URLs)</param>
+        /// <param name="requestObj">Scraping request (ScrapingRequestDto for single URL or batch request with URLs array)</param>
         /// <returns>Job ID or list of job IDs</returns>
         [HttpPost("scrape/background")]
         [ProducesResponseType(typeof(string), 202)]
@@ -236,13 +241,24 @@ namespace copilotTest.Controllers
         {
             try
             {
-                // Using JsonSerializer to detect the request type based on the presence of "urls" property
-                // This allows us to accept both single and batch requests in the same endpoint
-                if (requestObj.GetType().GetProperty("Urls") != null)
+                // Get the raw JSON string to properly analyze the request
+                var jsonString = System.Text.Json.JsonSerializer.Serialize(requestObj);
+                using var document = System.Text.Json.JsonDocument.Parse(jsonString);
+                
+                // Check if the JSON has a "urls" property (case insensitive)
+                bool hasBatchUrls = document.RootElement.EnumerateObject()
+                    .Any(prop => prop.Name.Equals("urls", StringComparison.OrdinalIgnoreCase));
+                
+                var jsonOptions = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                
+                if (hasBatchUrls)
                 {
                     // Process batch request
                     var batchRequest = System.Text.Json.JsonSerializer.Deserialize<BatchScrapingRequestDto>(
-                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                        jsonString, jsonOptions);
                     
                     if (batchRequest == null || batchRequest.Urls == null || !batchRequest.Urls.Any())
                     {
@@ -253,7 +269,7 @@ namespace copilotTest.Controllers
                     
                     foreach (var url in batchRequest.Urls)
                     {
-                        if (Uri.TryCreate(url, UriKind.Absolute, out _))
+                        if (!string.IsNullOrWhiteSpace(url) && Uri.TryCreate(url, UriKind.Absolute, out _))
                         {
                             var request = new ScrapingRequestDto
                             {
@@ -285,9 +301,9 @@ namespace copilotTest.Controllers
                 {
                     // Process single URL request
                     var request = System.Text.Json.JsonSerializer.Deserialize<ScrapingRequestDto>(
-                        System.Text.Json.JsonSerializer.Serialize(requestObj));
+                        jsonString, jsonOptions);
                     
-                    if (request == null || !Uri.TryCreate(request.Url, UriKind.Absolute, out _))
+                    if (request == null || string.IsNullOrWhiteSpace(request.Url) || !Uri.TryCreate(request.Url, UriKind.Absolute, out _))
                     {
                         return BadRequest("Invalid URL format");
                     }

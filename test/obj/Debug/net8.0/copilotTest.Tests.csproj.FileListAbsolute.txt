@@ -438,3 +438,5 @@
 /home/runner/work/copilotTest/copilotTest/test/obj/Debug/net8.0/copilotTest.Tests.pdb
 /home/runner/work/copilotTest/copilotTest/test/obj/Debug/net8.0/copilotTest.Tests.genruntimeconfig.cache
 /home/runner/work/copilotTest/copilotTest/test/obj/Debug/net8.0/ref/copilotTest.Tests.dll
+/home/runner/work/copilotTest/copilotTest/test/bin/Debug/net8.0/Castle.Core.dll
+/home/runner/work/copilotTest/copilotTest/test/bin/Debug/net8.0/Moq.dll
